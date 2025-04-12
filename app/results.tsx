@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
+import DriverCardPodium from "../components/DriverCardPodium";
 
 export default function Results() {
   interface positionData {
@@ -108,42 +109,21 @@ export default function Results() {
     );
     if (index === 0) {
       return (
-        <View style={[styles.driverCardPodium, styles.gold]}>
-          <Image
-            source={{
-              uri: curr_driver?.headshot_url,
-            }}
-            style={{ width: 120, height: 120 }}
-          ></Image>
-
-          <Text style={styles.medText}>{curr_driver?.full_name}</Text>
-        </View>
+        <DriverCardPodium
+          driver={curr_driver || { driver_number: "", full_name: "", team_name: "", headshot_url: "", country_code: "", session_key: "" }}
+          color_key = {"#e8be3a"}></DriverCardPodium>
       );
     } else if (index === 1) {
       return (
-        <View style={[styles.driverCardPodium, styles.silver]}>
-          <Image
-            source={{
-              uri: curr_driver?.headshot_url,
-            }}
-            style={{ width: 120, height: 120 }}
-          ></Image>
-
-          <Text style={styles.medText}>{curr_driver?.full_name}</Text>
-        </View>
+        <DriverCardPodium
+          driver={curr_driver || { driver_number: "", full_name: "", team_name: "", headshot_url: "", country_code: "", session_key: "" }}
+          color_key = {"silver"}></DriverCardPodium>
       );
     } else if (index === 2) {
       return (
-        <View style={[styles.driverCardPodium, styles.bronze]}>
-          <Image
-            source={{
-              uri: curr_driver?.headshot_url,
-            }}
-            style={{ width: 120, height: 120 }}
-          ></Image>
-
-          <Text style={styles.medText}>{curr_driver?.full_name}</Text>
-        </View>
+        <DriverCardPodium
+          driver={curr_driver || { driver_number: "", full_name: "", team_name: "", headshot_url: "", country_code: "", session_key: "" }}
+          color_key = {"#977547"}></DriverCardPodium>
       );
     } else {
       return (
@@ -196,6 +176,7 @@ export default function Results() {
           contentContainerStyle={{
             justifyContent: "center",
             alignItems: "center",
+            width: "100%",
           }}
           showsVerticalScrollIndicator={false}
         />
@@ -235,15 +216,6 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     color: "white",
   },
-  gold: {
-    backgroundColor: "#e8be3a",
-  },
-  silver: {
-    backgroundColor: "silver",
-  },
-  bronze: {
-    backgroundColor: "#977547",
-  },
   driverCardPodium: {
     margin: 10,
     padding: 10,
@@ -251,7 +223,7 @@ const styles = StyleSheet.create({
     height: 150,
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 10,
+    borderRadius: 15,
   },
   driverCard: {
     backgroundColor: "grey",
