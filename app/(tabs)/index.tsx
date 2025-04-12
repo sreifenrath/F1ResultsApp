@@ -16,10 +16,10 @@ export default function TabOneScreen() {
   });
 
   const router = useRouter();
-  function touch(key: string) {
+  function touch(key: string, race_name: string) {
     router.push({
       pathname: "/results",
-      params: { query: `${key}` },
+      params: { query: `${key}`, race_name: `${race_name}` },
     });
   }
 
@@ -27,7 +27,7 @@ export default function TabOneScreen() {
     return (
       <Pressable
         style={styles.raceContainer}
-        onPress={() => touch(item.meeting_key)}
+        onPress={() => touch(item.meeting_key, item.meeting_name)}
       >
         <Text style={styles.title}>{item.meeting_name}</Text>
       </Pressable>
@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
   title: {
     fontSize: 20,
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     borderRadius: 5,
-    width: 800,
+    width: 600,
     height: 75,
   },
 });

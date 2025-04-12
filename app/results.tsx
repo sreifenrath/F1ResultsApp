@@ -33,11 +33,13 @@ export default function Results() {
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
 
-  const { blank, query } = useLocalSearchParams();
+  const {blank, query, race_name } = useLocalSearchParams();
   const key = Number(query);
+  const race_title = String(race_name)
   const [positionData, setPositionData] = useState<positionData[]>([]);
   const [driver, setDriver] = useState<driver[]>([]);
   const [showRaceResults, setShowRaceResults] = useState(true);
+  const [barVisible, setBarVisible] = useState(false);
 
   const getSessions = (positionData: positionData[]): string[] => {
     const sessionNo = new Set(
@@ -114,7 +116,7 @@ export default function Results() {
             style={{ width: 120, height: 120 }}
           ></Image>
 
-          <Text style={styles.title}>{curr_driver?.full_name}</Text>
+          <Text style={styles.medText}>{curr_driver?.full_name}</Text>
         </View>
       );
     } else if (index === 1) {
@@ -127,7 +129,7 @@ export default function Results() {
             style={{ width: 120, height: 120 }}
           ></Image>
 
-          <Text style={styles.title}>{curr_driver?.full_name}</Text>
+          <Text style={styles.medText}>{curr_driver?.full_name}</Text>
         </View>
       );
     } else if (index === 2) {
@@ -140,13 +142,13 @@ export default function Results() {
             style={{ width: 120, height: 120 }}
           ></Image>
 
-          <Text style={styles.title}>{curr_driver?.full_name}</Text>
+          <Text style={styles.medText}>{curr_driver?.full_name}</Text>
         </View>
       );
     } else {
       return (
         <View style={styles.driverCard}>
-          <Text style={styles.title}>{curr_driver?.full_name}</Text>
+          <Text style={styles.medText}>{curr_driver?.full_name}</Text>
         </View>
       );
     }
@@ -164,17 +166,27 @@ export default function Results() {
   const qualiResults = arrangeResults(positionData, 2);
 
   return (
-    <ImageBackground
-      source={require("../assets/images/f1background.jpg")}
-      style={styles.imageBackground}
-    >
       <View style={styles.viewContainer}>
-        <View>
-          <Pressable onPress={() => setShowRaceResults(true)}>
-            <Text style={styles.title}>RACE</Text>
+        <View style = {styles.titleContainer}>
+          <Text style = {styles.titleText}>{race_name}</Text>
+        </View>
+        <View style = {styles.buttonContainer}>
+          <Pressable
+            onPress={() => {
+              setShowRaceResults(false);
+              setBarVisible(true);
+            }}
+            style={[
+              { backgroundColor: showRaceResults ? "#e8e8e8" : "white" },
+              styles.qualiRaceButton,
+            ]}
+          >
+            <Text style={styles.largeText}>QUALIFYING</Text>
+            {barVisible && <View style={styles.redBar}></View>}
           </Pressable>
-          <Pressable onPress={() => setShowRaceResults(false)}>
-            <Text style={styles.title}>QUALIFYING</Text>
+          <Pressable onPress={() => {setShowRaceResults(true); setBarVisible(false)}} style={[{ backgroundColor: showRaceResults ? "white" : "#e8e8e8" }, styles.qualiRaceButton]}>
+            <Text style={styles.largeText}>RACE</Text>
+            {!barVisible && <View style={styles.redBar}></View>}
           </Pressable>
         </View>
         <FlatList
@@ -188,25 +200,40 @@ export default function Results() {
           showsVerticalScrollIndicator={false}
         />
       </View>
-    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  imageBackground: {
-    flex: 1,
-    height: "100%",
-    width: "100%",
-  },
   viewContainer: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "#e8e8e8",
   },
-  title: {
+  titleContainer: {
+    backgroundColor: "red",
+    width: "100%",
+    height: 120,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  medText: {
     fontSize: 20,
     fontWeight: "bold",
     fontFamily: "FormulaFont",
     letterSpacing: 1,
+  },
+  largeText : {
+    fontSize: 27,
+    fontWeight: "bold",
+    fontFamily: "FormulaFont",
+    letterSpacing: 1,
+  },
+  titleText: {
+    fontSize: 55,
+    fontWeight: "bold",
+    fontFamily: "FormulaFont",
+    letterSpacing: 3,
+    color: "white",
   },
   gold: {
     backgroundColor: "#e8be3a",
@@ -238,5 +265,23 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
+    height: 100,
+    width: "100%",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
+  qualiRaceButton: {
+    height: "100%", 
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  redBar: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 7,
+    backgroundColor: "red",
+  }
 });
