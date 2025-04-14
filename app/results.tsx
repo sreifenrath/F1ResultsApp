@@ -107,6 +107,12 @@ export default function Results() {
     const curr_driver = driver.find(
       (driverItem) => driverItem.driver_number.toString() === item
     );
+    if (curr_driver && showRaceResults === true) {
+      curr_driver.session_key = sessions[sessions.length - 1];
+    }
+    if (curr_driver && showRaceResults === false) {
+      curr_driver.session_key = sessions[sessions.length - 2];
+    }
     if (index === 0) {
       return (
         <DriverCardPodium
