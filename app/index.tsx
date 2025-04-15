@@ -2,8 +2,9 @@ import { StyleSheet, View, Text, FlatList, Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
+import DropDownButton from "../components/DropDownButton";
 
-export default function TabOneScreen() {
+export default function Index() {
   interface RaceData {
     meeting_name: string;
     country_name: string;
@@ -48,6 +49,7 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
+      <DropDownButton></DropDownButton>
       <FlatList
         data={raceData}
         renderItem={renderRace}
