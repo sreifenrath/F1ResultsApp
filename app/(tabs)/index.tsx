@@ -35,15 +35,16 @@ export default function TabOneScreen() {
   };
 
   const [raceData, setRaceData] = useState<RaceData[]>([]);
+  const year = 2024;
 
   useEffect(() => {
-    fetch("https://api.openf1.org/v1/meetings?year=2024")
+    fetch(`https://api.openf1.org/v1/meetings?year=${year}`)
       .then((response) => response.json())
       .then((raceData) => {
         setRaceData(raceData);
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  }, [year]);
 
   return (
     <View style={styles.container}>
