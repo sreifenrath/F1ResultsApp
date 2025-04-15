@@ -31,7 +31,7 @@ export default function Driver() {
   }, [session, driver_number]);
 
   return (
-    <View>
+    <View style={{ backgroundColor: "white", flex: 1 }}>
       <Text>{Math.min(...lapData.map((lap) => lap.lap_duration))}</Text>
     </View>
   );

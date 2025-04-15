@@ -12,7 +12,7 @@ export default function TabOneScreen() {
   }
 
   const [fontsLoaded] = useFonts({
-    FormulaFont: require("../../assets/fonts/Formula1-Regular_web_0.ttf"),
+    FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
 
   const router = useRouter();
@@ -61,6 +61,7 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     flex: 1,
     alignItems: "center",
     width: "100%",
