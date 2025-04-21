@@ -9,10 +9,15 @@ import {
 import { useState } from "react";
 import { useFonts } from "expo-font";
 
-export default function DropDownButton() {
-  const seasons = [2023, 2024, 2025];
-  const [selectedSeason, setSelectedSeason] = useState(seasons[0]);
+interface HandlePressProps {
+  handlePress: (id: number) => void;
+  seasons: number[];
+}
 
+export default function DropDownButton({
+  handlePress,
+  seasons,
+}: HandlePressProps) {
   const [fontsLoaded] = useFonts({
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
@@ -20,7 +25,7 @@ export default function DropDownButton() {
   const renderItem = ({ item }: { item: number }) => {
     return (
       <Pressable
-        onPress={() => setSelectedSeason(item)}
+        onPress={() => handlePress(item)}
         style={styles.seasonContainer}
       >
         <Text style={styles.medText}>{item}</Text>
@@ -33,7 +38,6 @@ export default function DropDownButton() {
       <FlatList
         data={seasons}
         renderItem={renderItem}
-        horizontal={true}
         showsHorizontalScrollIndicator={false}
       ></FlatList>
     </View>
@@ -46,11 +50,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   seasonContainer: {
-    padding: 15,
     margin: 5,
   },
   medText: {
-    fontSize: 45,
+    fontSize: 25,
     fontWeight: "bold",
     fontFamily: "FormulaFont",
     letterSpacing: 1,
