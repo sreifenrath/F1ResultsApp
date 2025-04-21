@@ -11,10 +11,11 @@ export default function Index() {
     location: string;
     meeting_key: string;
   }
-
   const [fontsLoaded] = useFonts({
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
+
+  const seasons = [2023, 2024, 2025];
 
   const router = useRouter();
   function touch(key: string, race_name: string) {
@@ -36,7 +37,11 @@ export default function Index() {
   };
 
   const [raceData, setRaceData] = useState<RaceData[]>([]);
-  const year = 2024;
+  const [year, setYear] = useState<number>(seasons[0]);
+
+  const handlePress = (id: number) => {
+    setYear(id);
+  };
 
   useEffect(() => {
     fetch(`https://api.openf1.org/v1/meetings?year=${year}`)
@@ -49,13 +54,14 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <DropDownButton></DropDownButton>
+      <View>
+        <DropDownButton handlePress={handlePress} seasons={seasons} />
+      </View>
       <FlatList
+        style={{ flex: 1 }}
         data={raceData}
         renderItem={renderRace}
-        numColumns={2}
         keyExtractor={(item) => item.meeting_key}
-        showsVerticalScrollIndicator={false}
       ></FlatList>
     </View>
   );
@@ -64,10 +70,10 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    width: "100%",
-    height: "100%",
+    padding: 10,
   },
   title: {
     fontSize: 20,
