@@ -31,7 +31,7 @@ export default function Index() {
         style={styles.raceContainer}
         onPress={() => touch(item.meeting_key, item.meeting_name)}
       >
-        <Text style={styles.title}>{item.meeting_name}</Text>
+        <Text style={styles.medText}>{item.meeting_name}</Text>
       </Pressable>
     );
   };
@@ -53,17 +53,28 @@ export default function Index() {
   }, [year]);
 
   return (
-    <View style={styles.container}>
-      <View>
-        <DropDownButton handlePress={handlePress} seasons={seasons} />
+    <>
+      <View style={styles.titleContainer}>
+        <Text style={styles.titleText}>{year} Calendar Results</Text>
       </View>
-      <FlatList
-        style={{ flex: 1 }}
-        data={raceData}
-        renderItem={renderRace}
-        keyExtractor={(item) => item.meeting_key}
-      ></FlatList>
-    </View>
+      <View style={styles.container}>
+        <View style={styles.yearContainer}>
+          <DropDownButton
+            handlePress={handlePress}
+            seasons={seasons}
+            currentYear={year}
+          />
+        </View>
+        <View style={styles.flatlistContainer}>
+          <FlatList
+            style={{ flex: 1 }}
+            data={raceData}
+            renderItem={renderRace}
+            keyExtractor={(item) => item.meeting_key}
+          ></FlatList>
+        </View>
+      </View>
+    </>
   );
 }
 
@@ -72,21 +83,43 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "center",
+    padding: 10,
+  },
+  yearContainer: {
     alignItems: "center",
     padding: 10,
   },
-  title: {
+  flatlistContainer: {
+    height: "70%",
+    width: 500,
+    margin: 25,
+  },
+  titleContainer: {
+    backgroundColor: "red",
+    width: "100%",
+    height: 120,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  titleText: {
+    fontSize: 55,
+    fontWeight: "bold",
+    fontFamily: "FormulaFont",
+    letterSpacing: 3,
+    color: "white",
+  },
+  medText: {
     fontSize: 20,
     fontWeight: "bold",
     fontFamily: "FormulaFont",
     letterSpacing: 1,
   },
   raceContainer: {
-    backgroundColor: "grey",
     padding: 10,
-    margin: 10,
+    margin: 2,
     borderRadius: 5,
-    width: 600,
-    height: 75,
+    borderBottomWidth: 3,
+    borderLeftWidth: 2,
+    borderColor: "grey",
   },
 });

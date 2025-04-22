@@ -12,11 +12,13 @@ import { useFonts } from "expo-font";
 interface HandlePressProps {
   handlePress: (id: number) => void;
   seasons: number[];
+  currentYear: number;
 }
 
 export default function DropDownButton({
   handlePress,
   seasons,
+  currentYear,
 }: HandlePressProps) {
   const [fontsLoaded] = useFonts({
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
@@ -28,7 +30,14 @@ export default function DropDownButton({
         onPress={() => handlePress(item)}
         style={styles.seasonContainer}
       >
-        <Text style={styles.medText}>{item}</Text>
+        <Text
+          style={[
+            styles.medText,
+            { color: currentYear === item ? "red" : "black" },
+          ]}
+        >
+          {item}
+        </Text>
       </Pressable>
     );
   };
