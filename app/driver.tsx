@@ -1,17 +1,19 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
+import { useFonts } from "expo-font";
 
 export default function Driver() {
   interface lapData {
     lap_duration: number;
-    duration_section_1: number;
-    duration_section_2: number;
-    duration_section_3: number;
-    segments_section_1: number[];
-    segments_section_2: number[];
-    segments_section_3: number[];
+    duration_sector_1: number;
+    duration_sector_2: number;
+    duration_sector_3: number;
+    segments_sector_1: number[];
+    segments_sector_2: number[];
+    segments_sector_3: number[];
     lap_number: number;
+    st_speed: number;
   }
 
   interface driverData {
@@ -25,6 +27,10 @@ export default function Driver() {
   const { blank, session, driver_number } = useLocalSearchParams();
   const [lapData, setLapData] = useState<lapData[]>([]);
   const [driverData, setDriverData] = useState<driverData[]>([]);
+
+  const [fontsLoaded] = useFonts({
+    FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
+  });
 
   useEffect(() => {
     fetch(
@@ -51,38 +57,114 @@ export default function Driver() {
       .catch((error) => console.error("Error fetching data:", error));
   }, [session, driver_number]);
 
-  const driver = driverData[0]
+  const driver = driverData[0];
+  const fastestLap =
+    lapData.length > 0
+      ? lapData.reduce((fastest, current) =>
+          current.lap_duration < fastest.lap_duration ? current : fastest
+        )
+      : null; // or undefined, or a fallback object
 
   return (
     <View style={styles.container}>
-      <View style = {[styles.aboutContainer, {backgroundColor : `#${driver?.team_colour}`}]}>
-      <View>
-        <Image  style = {styles.driverImage} source={{ uri: driver?.headshot_url }} />
+      <View
+        style={[
+          styles.aboutContainer,
+          { borderColor: `#${driver?.team_colour}` },
+        ]}
+      >
+        <Image
+          style={styles.driverImage}
+          source={{ uri: driver?.headshot_url }}
+        />
+        <View style={styles.driverContainer}>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>Name:</Text>
+          <Text style={styles.medText}>{driver?.full_name}</Text>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>Country:</Text>
+          <Text style={styles.medText}>{driver?.country_code}</Text>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>Team:</Text>
+          <Text style={styles.medText}>{driver?.team_name}</Text>
+        </View>
+        <View>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>
+            Lap Time:
+          </Text>
+          <Text style={styles.medText}>{fastestLap?.lap_duration}</Text>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>
+            Top Speed:
+          </Text>
+          <Text style={styles.medText}>{fastestLap?.st_speed}kph</Text>
+        </View>
       </View>
-      <View>
-        <Text>{driver?.full_name}</Text>
-        <Text>{driver?.country_code}</Text>
+      <View
+        style={[
+          styles.sectorContainer,
+          { borderColor: `#${driver?.team_colour}` },
+        ]}
+      >
+        <View style={styles.sectorTimeContainer}>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>Sector 1</Text>
+          <Text style={styles.medText}>{fastestLap?.duration_sector_1}</Text>
+        </View>
+        <View style={styles.sectorTimeContainer}>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>Sector 2</Text>
+          <Text style={styles.medText}>{fastestLap?.duration_sector_2}</Text>
+        </View>
+        <View style={styles.sectorTimeContainer}>
+          <Text style={[styles.medText, { fontWeight: "bold" }]}>Sector 3</Text>
+          <Text style={styles.medText}>{fastestLap?.duration_sector_3}</Text>
+        </View>
       </View>
-
-      </View>
-      <Text>{Math.min(...lapData.map((lap) => lap.lap_duration))}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container : { 
-    backgroundColor: "#e8e8e8", 
+  container: {
+    backgroundColor: "#e8e8e8",
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
   },
-  aboutContainer : {
+  aboutContainer: {
     width: "60%",
-    height: 300,
+    height: 230,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    marginTop: 50,
+    marginBottom: 20,
+    backgroundColor: "white",
+    borderLeftWidth: 2,
+    borderBottomWidth: 3,
   },
-  driverImage :{
+  driverImage: {
     height: 120,
     width: 120,
+  },
+  driverContainer: {
+    padding: 20,
+  },
+  sectorContainer: {
+    width: "60%",
+    height: 100,
+    backgroundColor: "white",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: 60,
+    paddingRight: 60,
+    borderLeftWidth: 2,
+    borderBottomWidth: 3,
+  },
+  sectorTimeContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  medText: {
+    fontSize: 20,
+    fontFamily: "FormulaFont",
+    letterSpacing: 1,
   },
 });
