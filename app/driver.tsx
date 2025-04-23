@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 
@@ -13,8 +13,18 @@ export default function Driver() {
     segments_section_3: number[];
     lap_number: number;
   }
+
+  interface driverData {
+    country_code: string;
+    full_name: string;
+    headshot_url: string;
+    name_acronym: string;
+    team_colour: string;
+    team_name: string;
+  }
   const { blank, session, driver_number } = useLocalSearchParams();
   const [lapData, setLapData] = useState<lapData[]>([]);
+  const [driverData, setDriverData] = useState<driverData[]>([]);
 
   useEffect(() => {
     fetch(
@@ -30,9 +40,49 @@ export default function Driver() {
       .catch((error) => console.error("Error fetching data:", error));
   }, [session, driver_number]);
 
+  useEffect(() => {
+    fetch(
+      `https://api.openf1.org/v1/drivers?session_key=${session}&driver_number=${driver_number}`
+    )
+      .then((response) => response.json())
+      .then((driver) => {
+        setDriverData(driver);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, [session, driver_number]);
+
+  const driver = driverData[0]
+
   return (
-    <View style={{ backgroundColor: "white", flex: 1 }}>
+    <View style={styles.container}>
+      <View style = {[styles.aboutContainer, {backgroundColor : `#${driver?.team_colour}`}]}>
+      <View>
+        <Image  style = {styles.driverImage} source={{ uri: driver?.headshot_url }} />
+      </View>
+      <View>
+        <Text>{driver?.full_name}</Text>
+        <Text>{driver?.country_code}</Text>
+      </View>
+
+      </View>
       <Text>{Math.min(...lapData.map((lap) => lap.lap_duration))}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container : { 
+    backgroundColor: "#e8e8e8", 
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  aboutContainer : {
+    width: "60%",
+    height: 300,
+  },
+  driverImage :{
+    height: 120,
+    width: 120,
+  },
+});

@@ -100,13 +100,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     padding: 10,
+    flex: 1,
   },
   yearContainer: {
     alignItems: "center",
     padding: 10,
   },
   flatlistContainer: {
-    height: "70%",
+    height: "80%",
     width: "50%",
     margin: 25,
     padding: 10,
