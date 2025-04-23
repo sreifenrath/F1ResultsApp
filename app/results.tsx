@@ -34,9 +34,9 @@ export default function Results() {
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
 
-  const {blank, query, race_name } = useLocalSearchParams();
+  const { blank, query, race_name } = useLocalSearchParams();
   const key = Number(query);
-  const race_title = String(race_name)
+  const race_title = String(race_name);
   const [positionData, setPositionData] = useState<positionData[]>([]);
   const [driver, setDriver] = useState<driver[]>([]);
   const [showRaceResults, setShowRaceResults] = useState(true);
@@ -116,24 +116,55 @@ export default function Results() {
     if (index === 0) {
       return (
         <DriverCardPodium
-          driver={curr_driver || { driver_number: "", full_name: "", team_name: "", headshot_url: "", country_code: "", session_key: "" }}
-          color_key = {"#e8be3a"}></DriverCardPodium>
+          driver={
+            curr_driver || {
+              driver_number: "",
+              full_name: "",
+              team_name: "",
+              headshot_url: "",
+              country_code: "",
+              session_key: "",
+            }
+          }
+          color_key={"#e8be3a"}
+        ></DriverCardPodium>
       );
     } else if (index === 1) {
       return (
         <DriverCardPodium
-          driver={curr_driver || { driver_number: "", full_name: "", team_name: "", headshot_url: "", country_code: "", session_key: "" }}
-          color_key = {"silver"}></DriverCardPodium>
+          driver={
+            curr_driver || {
+              driver_number: "",
+              full_name: "",
+              team_name: "",
+              headshot_url: "",
+              country_code: "",
+              session_key: "",
+            }
+          }
+          color_key={"silver"}
+        ></DriverCardPodium>
       );
     } else if (index === 2) {
       return (
         <DriverCardPodium
-          driver={curr_driver || { driver_number: "", full_name: "", team_name: "", headshot_url: "", country_code: "", session_key: "" }}
-          color_key = {"#977547"}></DriverCardPodium>
+          driver={
+            curr_driver || {
+              driver_number: "",
+              full_name: "",
+              team_name: "",
+              headshot_url: "",
+              country_code: "",
+              session_key: "",
+            }
+          }
+          color_key={"#977547"}
+        ></DriverCardPodium>
       );
     } else {
       return (
         <View style={styles.driverCard}>
+          <Text>{index + 1}</Text>
           <Text style={styles.medText}>{curr_driver?.full_name}</Text>
         </View>
       );
@@ -152,41 +183,50 @@ export default function Results() {
   const qualiResults = arrangeResults(positionData, 2);
 
   return (
-      <View style={styles.viewContainer}>
-        <View style = {styles.titleContainer}>
-          <Text style = {styles.titleText}>{race_name}</Text>
-        </View>
-        <View style = {styles.buttonContainer}>
-          <Pressable
-            onPress={() => {
-              setShowRaceResults(false);
-              setBarVisible(true);
-            }}
-            style={[
-              { backgroundColor: showRaceResults ? "#e8e8e8" : "white" },
-              styles.qualiRaceButton,
-            ]}
-          >
-            <Text style={styles.largeText}>QUALIFYING</Text>
-            {barVisible && <View style={styles.redBar}></View>}
-          </Pressable>
-          <Pressable onPress={() => {setShowRaceResults(true); setBarVisible(false)}} style={[{ backgroundColor: showRaceResults ? "white" : "#e8e8e8" }, styles.qualiRaceButton]}>
-            <Text style={styles.largeText}>RACE</Text>
-            {!barVisible && <View style={styles.redBar}></View>}
-          </Pressable>
-        </View>
-        <FlatList
-          data={showRaceResults ? raceResults : qualiResults}
-          renderItem={renderDriver}
-          keyExtractor={(item) => item.toString()}
-          contentContainerStyle={{
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
-          showsVerticalScrollIndicator={false}
-        />
+    <View style={styles.viewContainer}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.titleText}>{race_name}</Text>
       </View>
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => {
+            setShowRaceResults(false);
+            setBarVisible(true);
+          }}
+          style={[
+            { backgroundColor: showRaceResults ? "#e8e8e8" : "white" },
+            styles.qualiRaceButton,
+          ]}
+        >
+          <Text style={styles.largeText}>QUALIFYING</Text>
+          {barVisible && <View style={styles.redBar}></View>}
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setShowRaceResults(true);
+            setBarVisible(false);
+          }}
+          style={[
+            { backgroundColor: showRaceResults ? "white" : "#e8e8e8" },
+            styles.qualiRaceButton,
+          ]}
+        >
+          <Text style={styles.largeText}>RACE</Text>
+          {!barVisible && <View style={styles.redBar}></View>}
+        </Pressable>
+      </View>
+      <FlatList
+        data={showRaceResults ? raceResults : qualiResults}
+        renderItem={renderDriver}
+        keyExtractor={(item) => item.toString()}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+        }}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }
 
@@ -209,7 +249,7 @@ const styles = StyleSheet.create({
     fontFamily: "FormulaFont",
     letterSpacing: 1,
   },
-  largeText : {
+  largeText: {
     fontSize: 27,
     fontWeight: "bold",
     fontFamily: "FormulaFont",
@@ -232,14 +272,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   driverCard: {
-    backgroundColor: "grey",
     margin: 10,
     padding: 10,
-    width: 500,
+    width: 700,
     height: 50,
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 10,
+    borderLeftWidth: 2,
+    borderBottomWidth: 3,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -249,7 +289,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   qualiRaceButton: {
-    height: "100%", 
+    height: "100%",
     width: "50%",
     justifyContent: "center",
     alignItems: "center",
@@ -261,5 +301,5 @@ const styles = StyleSheet.create({
     right: 0,
     height: 7,
     backgroundColor: "red",
-  }
+  },
 });

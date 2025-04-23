@@ -25,13 +25,29 @@ export default function Index() {
     });
   }
 
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const renderRace = ({ item, index }: { item: RaceData; index: number }) => {
     return (
       <Pressable
         style={styles.raceContainer}
         onPress={() => touch(item.meeting_key, item.meeting_name)}
+        onHoverIn={() => setHoveredIndex(index)}
+        onHoverOut={() => setHoveredIndex(null)}
       >
-        <Text style={styles.medText}>{item.meeting_name}</Text>
+        <Text
+          style={[
+            styles.medText,
+            hoveredIndex === index
+              ? { color: "red", fontSize: 21 }
+              : { color: "black" },
+          ]}
+        >
+          {item.meeting_name}
+        </Text>
+        <Text style={styles.smallText}>
+          {item.location}, {item.country_name}
+        </Text>
       </Pressable>
     );
   };
@@ -80,7 +96,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: "#e8e8e8",
     flexDirection: "row",
     justifyContent: "center",
     padding: 10,
@@ -91,8 +107,9 @@ const styles = StyleSheet.create({
   },
   flatlistContainer: {
     height: "70%",
-    width: 500,
+    width: "50%",
     margin: 25,
+    padding: 10,
   },
   titleContainer: {
     backgroundColor: "red",
@@ -114,12 +131,15 @@ const styles = StyleSheet.create({
     fontFamily: "FormulaFont",
     letterSpacing: 1,
   },
+  smallText: {
+    fontSize: 11,
+    fontFamily: "FormulaFont",
+    letterSpacing: 1,
+  },
   raceContainer: {
     padding: 10,
     margin: 2,
-    borderRadius: 5,
-    borderBottomWidth: 3,
+    borderBottomWidth: 2,
     borderLeftWidth: 2,
-    borderColor: "grey",
   },
 });
