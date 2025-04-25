@@ -176,7 +176,7 @@ export default function Results() {
             touch(curr_driver.session_key, curr_driver.driver_number);
           }
         }} style={styles.driverCard}>
-          <Text>{index + 1}</Text>
+          <Text style = {[styles.medText, {fontWeight: "light"}]}>{index + 1}  </Text>
           <Text style={styles.medText}>{curr_driver?.full_name}</Text>
         </Pressable>
       );

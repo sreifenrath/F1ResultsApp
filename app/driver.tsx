@@ -123,7 +123,6 @@ export default function Driver() {
           current.lap_duration < fastest.lap_duration ? current : fastest
         )
       : null; // or undefined, or a fallback object
-
   return (
     <View style={styles.container}>
       <View style={styles.aboutContainer}>
@@ -134,28 +133,35 @@ export default function Driver() {
           ]}
           source={{ uri: driver?.headshot_url }}
         />
+        <View>
         <View style={styles.driverContainer}>
+          <View style = {{paddingRight: 40}}>
           <Text style={[styles.medText, { fontWeight: "bold" }]}>Name:</Text>
           <Text style={styles.medText}>{driver?.full_name}</Text>
-          <Text>{"\n"}</Text>
+          </View>
+          <View style = {{paddingRight: 40}}>
           <Text style={[styles.medText, { fontWeight: "bold" }]}>Country:</Text>
           <Text style={styles.medText}>{driver?.country_code}</Text>
-          <Text>{"\n"}</Text>
+          </View>
+          <View style = {{paddingRight: 40}}>
           <Text style={[styles.medText, { fontWeight: "bold" }]}>Team:</Text>
           <Text style={styles.medText}>{driver?.team_name}</Text>
-          <Text>{"\n"}</Text>
+          </View>
         </View>
-        <View>
+        <View style={styles.driverContainer}>
+          <View style = {{paddingRight: 40}}>
           <Text style={[styles.medText, { fontWeight: "bold" }]}>
             Lap Time:
           </Text>
           <Text style={styles.medText}>{fastestLap?.lap_duration}</Text>
-          <Text>{"\n"}</Text>
+          </View>
+          <View style = {{paddingRight: 40}}>
           <Text style={[styles.medText, { fontWeight: "bold" }]}>
             Top Speed:
           </Text>
           <Text style={styles.medText}>{fastestLap?.st_speed}kph</Text>
-          <Text>{"\n"}</Text>
+          </View>
+        </View>
         </View>
       </View>
       <View style={styles.sectorContainer}>
@@ -172,9 +178,12 @@ export default function Driver() {
           <Text style={styles.medText}>{fastestLap?.duration_sector_3}</Text>
         </View>
       </View>
-      <View style = {{padding: 20}}>
+      <View style = {styles.radioListContainer}>
+        <View style = {{flexDirection: "row", alignItems: "center", width: 180, justifyContent: "space-between"}}>
         <Text style = {[styles.medText, {fontWeight: "bold"}]}>Team Radio</Text>
-        <FlatList data={radioData} renderItem={renderRadioItem}></FlatList>
+        <Image source = {require("../assets/images/audioicon.png")} style = {{height: 30, width: 30}}></Image>
+        </View>
+        <FlatList data={radioData} renderItem={renderRadioItem} style = {styles.radioFlatlist}></FlatList>
       </View>
     </View>
   );
@@ -207,7 +216,11 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 3,
   },
-  driverContainer: {},
+  driverContainer: {
+    flexDirection: "row",
+    width: "100%",
+    margin: 10,
+  },
   sectorContainer: {
     width: "60%",
     height: 100,
@@ -250,10 +263,19 @@ const styles = StyleSheet.create({
   },
   radioTextContainer: {
     height: 50,
-    width: 600,
+    width: "100%",
     backgroundColor: "white",
     borderLeftWidth: 2,
     borderBottomWidth: 3,
     padding: 10,
+  },
+  radioFlatlist : {
+    height: 300,
+    width: "100%",
+    marginTop: 10,
+  },
+  radioListContainer: {
+    paddingTop: 20,
+    width: "60%",
   },
 });

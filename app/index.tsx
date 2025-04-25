@@ -142,5 +142,6 @@ const styles = StyleSheet.create({
     margin: 2,
     borderBottomWidth: 2,
     borderLeftWidth: 2,
+    backgroundColor: "white",
   },
 });
