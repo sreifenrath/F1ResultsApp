@@ -103,6 +103,14 @@ export default function Results() {
     return () => clearTimeout(timeout);
   }, [positionData]);
 
+  const router = useRouter();
+  function touch(session_key: string, driver_number: string) {
+    router.push({
+      pathname: "/driver",
+      params: { session: `${session_key}`, driver_number: `${driver_number}` },
+    });
+  }
+
   const renderDriver = ({ item, index }: { item: string; index: number }) => {
     const curr_driver = driver.find(
       (driverItem) => driverItem.driver_number.toString() === item
@@ -163,10 +171,14 @@ export default function Results() {
       );
     } else {
       return (
-        <View style={styles.driverCard}>
+        <Pressable onPress = {() => {
+          if (curr_driver?.session_key && curr_driver?.driver_number) {
+            touch(curr_driver.session_key, curr_driver.driver_number);
+          }
+        }} style={styles.driverCard}>
           <Text>{index + 1}</Text>
           <Text style={styles.medText}>{curr_driver?.full_name}</Text>
-        </View>
+        </Pressable>
       );
     }
   };

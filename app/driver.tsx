@@ -34,7 +34,7 @@ export default function Driver() {
   }
 
   interface radioData {
-    date: Date;
+    date: string;
     recording_url: string;
   }
   const { blank, session, driver_number } = useLocalSearchParams();
@@ -96,6 +96,8 @@ export default function Driver() {
     item: radioData;
     index: number;
   }) => {
+  const date = new Date(item.date);
+
     return (
       <View style={styles.radioContainer}>
         <Pressable
@@ -108,7 +110,7 @@ export default function Driver() {
           />
         </Pressable>
         <View style={styles.radioTextContainer}>
-          <Text style={styles.medText}>Radio Message {index + 1}</Text>
+          <Text style={styles.medText}>Radio {date.toLocaleTimeString()}</Text>
         </View>
       </View>
     );
@@ -170,7 +172,10 @@ export default function Driver() {
           <Text style={styles.medText}>{fastestLap?.duration_sector_3}</Text>
         </View>
       </View>
-      <FlatList data={radioData} renderItem={renderRadioItem}></FlatList>
+      <View style = {{padding: 20}}>
+        <Text style = {[styles.medText, {fontWeight: "bold"}]}>Team Radio</Text>
+        <FlatList data={radioData} renderItem={renderRadioItem}></FlatList>
+      </View>
     </View>
   );
 }
@@ -222,6 +227,11 @@ const styles = StyleSheet.create({
   },
   medText: {
     fontSize: 20,
+    fontFamily: "FormulaFont",
+    letterSpacing: 1,
+  },
+  smallText : {
+    fontSize: 15,
     fontFamily: "FormulaFont",
     letterSpacing: 1,
   },
