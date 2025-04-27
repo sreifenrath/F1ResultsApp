@@ -104,10 +104,10 @@ export default function Results() {
   }, [positionData]);
 
   const router = useRouter();
-  function touch(session_key: string, driver_number: string) {
+  function touch(session_key: string, driver_number: string, session_name: string) {
     router.push({
       pathname: "/driver",
-      params: { session: `${session_key}`, driver_number: `${driver_number}` },
+      params: { session: `${session_key}`, driver_number: `${driver_number}`, session_name: `${session_name}` },
     });
   }
 
@@ -135,6 +135,7 @@ export default function Results() {
             }
           }
           color_key={"#e8be3a"}
+          session_name = {showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
       );
     } else if (index === 1) {
@@ -151,6 +152,7 @@ export default function Results() {
             }
           }
           color_key={"silver"}
+          session_name = {showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
       );
     } else if (index === 2) {
@@ -167,13 +169,14 @@ export default function Results() {
             }
           }
           color_key={"#977547"}
+          session_name = {showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
       );
     } else {
       return (
         <Pressable onPress = {() => {
           if (curr_driver?.session_key && curr_driver?.driver_number) {
-            touch(curr_driver.session_key, curr_driver.driver_number);
+            touch(curr_driver.session_key, curr_driver.driver_number, showRaceResults ? "RACE" : "QUALIFYING");
           }
         }} style={styles.driverCard}>
           <Text style = {[styles.medText, {fontWeight: "light"}]}>{index + 1}  </Text>

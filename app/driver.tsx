@@ -37,7 +37,8 @@ export default function Driver() {
     date: string;
     recording_url: string;
   }
-  const { blank, session, driver_number } = useLocalSearchParams();
+
+  const { blank, session, driver_number, session_name } = useLocalSearchParams();
   const [lapData, setLapData] = useState<lapData[]>([]);
   const [driverData, setDriverData] = useState<driverData[]>([]);
   const [radioData, setRadioData] = useState<radioData[]>([]);
@@ -116,6 +117,13 @@ export default function Driver() {
     );
   };
 
+  const toMinutes = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    const remainingMilliseconds = Math.floor((seconds % 1) * 1000);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}.${remainingMilliseconds.toString().padStart(3, "0")}`;
+  }
+
   const driver = driverData[0];
   const fastestLap =
     lapData.length > 0
@@ -125,6 +133,9 @@ export default function Driver() {
       : null; // or undefined, or a fallback object
   return (
     <View style={styles.container}>
+      <View style = {styles.titleContainer}>
+        <Text style = {styles.titleText}>{driver?.name_acronym} {session_name} RESULTS</Text>
+      </View>
       <View style={styles.aboutContainer}>
         <Image
           style={[
@@ -153,7 +164,7 @@ export default function Driver() {
           <Text style={[styles.medText, { fontWeight: "bold" }]}>
             Lap Time:
           </Text>
-          <Text style={styles.medText}>{fastestLap?.lap_duration}</Text>
+          <Text style={styles.medText}>{toMinutes(fastestLap?.lap_duration ?? 0)}</Text>
           </View>
           <View style = {{paddingRight: 40}}>
           <Text style={[styles.medText, { fontWeight: "bold" }]}>
@@ -179,11 +190,15 @@ export default function Driver() {
         </View>
       </View>
       <View style = {styles.radioListContainer}>
-        <View style = {{flexDirection: "row", alignItems: "center", width: 180, justifyContent: "space-between"}}>
-        <Text style = {[styles.medText, {fontWeight: "bold"}]}>Team Radio</Text>
-        <Image source = {require("../assets/images/audioicon.png")} style = {{height: 30, width: 30}}></Image>
-        </View>
-        <FlatList data={radioData} renderItem={renderRadioItem} style = {styles.radioFlatlist}></FlatList>
+        {radioData.length > 0 && (
+          <>
+            <View style={{ flexDirection: "row", alignItems: "center", width: 180, justifyContent: "space-between" }}>
+              <Text style={[styles.medText, { fontWeight: "bold" }]}>Team Radio</Text>
+              <Image source={require("../assets/images/audioicon.png")} style={{ height: 30, width: 30 }} />
+            </View>
+            <FlatList data={radioData} renderItem={renderRadioItem} style={styles.radioFlatlist} />
+          </>
+        )}
       </View>
     </View>
   );
@@ -196,6 +211,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
+  titleContainer: {
+    backgroundColor: "red",
+    width: "100%",
+    height: 120,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   aboutContainer: {
     width: "60%",
     height: 230,
@@ -203,8 +225,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     padding: 30,
-    marginTop: 50,
-    marginBottom: 20,
+    margin: 20,
     backgroundColor: "white",
     borderLeftWidth: 2,
     borderBottomWidth: 3,
@@ -238,6 +259,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  titleText: {
+    fontSize: 55,
+    fontWeight: "bold",
+    fontFamily: "FormulaFont",
+    letterSpacing: 3,
+    color: "white",
+  },
   medText: {
     fontSize: 20,
     fontFamily: "FormulaFont",
@@ -270,7 +298,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   radioFlatlist : {
-    height: 300,
+    height: 200,
     width: "100%",
     marginTop: 10,
   },

@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 export default function DriverCard({
   driver,
   color_key,
+  session_name,
 }: {
   driver: {
     driver_number: string;
@@ -15,22 +16,23 @@ export default function DriverCard({
     session_key: string;
   };
   color_key: string;
+  session_name: string;
 }) {
   const [fontsLoaded] = useFonts({
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
 
   const router = useRouter();
-  function touch(session_key: string, driver_number: string) {
+  function touch(session_key: string, driver_number: string, session_name: string) {
     router.push({
       pathname: "/driver",
-      params: { session: `${session_key}`, driver_number: `${driver_number}` },
+      params: { session: `${session_key}`, driver_number: `${driver_number}`, session_name: `${session_name}` },
     });
   }
 
   return (
     <Pressable
-      onPress={() => touch(driver?.session_key, driver?.driver_number)}
+      onPress={() => touch(driver?.session_key, driver?.driver_number, session_name)}
       style={[styles.driverCardPodium, { backgroundColor: color_key }]}
     >
       <View style={styles.driverImageView}>
