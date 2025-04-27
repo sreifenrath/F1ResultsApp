@@ -10,12 +10,12 @@ export default function Index() {
     country_name: string;
     location: string;
     meeting_key: string;
+    date_start: string;
   }
   const [fontsLoaded] = useFonts({
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
 
-  const seasons = [2023, 2024, 2025];
 
   const router = useRouter();
   function touch(key: string, race_name: string) {
@@ -53,20 +53,31 @@ export default function Index() {
   };
 
   const [raceData, setRaceData] = useState<RaceData[]>([]);
-  const [year, setYear] = useState<number>(seasons[0]);
+  const [year, setYear] = useState<number>(2023);
 
   const handlePress = (id: number) => {
     setYear(id);
   };
 
   useEffect(() => {
-    fetch(`https://api.openf1.org/v1/meetings?year=${year}`)
+    fetch(`https://api.openf1.org/v1/meetings`)
       .then((response) => response.json())
       .then((raceData) => {
-        setRaceData(raceData);
+        const filteredData = raceData
+          .filter((race: { meeting_name: string; }) => !race.meeting_name.toLowerCase().includes("testing"))
+          .map((race: { date_start: string | number | Date; }) => ({
+            ...race,
+            date_start: new Date(race.date_start).getUTCFullYear().toString(),
+          }));
+  
+        setRaceData(filteredData);
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, [year]);
+
+  const seasons = Array.from(
+    new Set(raceData.map(race => new Date(race.date_start).getUTCFullYear()))
+  )
 
   return (
     <>
@@ -84,7 +95,7 @@ export default function Index() {
         <View style={styles.flatlistContainer}>
           <FlatList
             style={{ flex: 1 }}
-            data={raceData}
+            data={raceData.filter(race => race.date_start === year.toString())}
             renderItem={renderRace}
             keyExtractor={(item) => item.meeting_key}
           ></FlatList>
