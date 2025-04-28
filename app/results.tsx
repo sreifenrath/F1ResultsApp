@@ -144,16 +144,14 @@ export default function Results() {
     if (index === 0) {
       return (
         <DriverCardPodium
-          driver={
-            curr_driver || {
-              driver_number: "",
-              full_name: "",
-              team_name: "",
-              headshot_url: "",
-              country_code: "",
-              session_key: "",
-            }
-          }
+          driver={{
+            driver_number: curr_driver?.driver_number ?? "N/A",
+            full_name: curr_driver?.full_name ?? "Loading...",
+            team_name: curr_driver?.team_name ?? "N/A",
+            headshot_url: curr_driver?.headshot_url ?? "",
+            country_code: curr_driver?.country_code ?? "N/A",
+            session_key: curr_driver?.session_key ?? "N/A",
+          }}
           color_key={"#e8be3a"}
           session_name={showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
@@ -161,16 +159,14 @@ export default function Results() {
     } else if (index === 1) {
       return (
         <DriverCardPodium
-          driver={
-            curr_driver || {
-              driver_number: "",
-              full_name: "",
-              team_name: "",
-              headshot_url: "",
-              country_code: "",
-              session_key: "",
-            }
-          }
+          driver={{
+            driver_number: curr_driver?.driver_number ?? "N/A",
+            full_name: curr_driver?.full_name ?? "Loading...",
+            team_name: curr_driver?.team_name ?? "N/A",
+            headshot_url: curr_driver?.headshot_url ?? "",
+            country_code: curr_driver?.country_code ?? "N/A",
+            session_key: curr_driver?.session_key ?? "N/A",
+          }}
           color_key={"silver"}
           session_name={showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
@@ -178,16 +174,14 @@ export default function Results() {
     } else if (index === 2) {
       return (
         <DriverCardPodium
-          driver={
-            curr_driver || {
-              driver_number: "",
-              full_name: "",
-              team_name: "",
-              headshot_url: "",
-              country_code: "",
-              session_key: "",
-            }
-          }
+          driver={{
+            driver_number: curr_driver?.driver_number ?? "N/A",
+            full_name: curr_driver?.full_name ?? "Loading...",
+            team_name: curr_driver?.team_name ?? "N/A",
+            headshot_url: curr_driver?.headshot_url ?? "",
+            country_code: curr_driver?.country_code ?? "N/A",
+            session_key: curr_driver?.session_key ?? "N/A",
+          }}
           color_key={"#977547"}
           session_name={showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
