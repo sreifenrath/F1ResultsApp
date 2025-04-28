@@ -23,16 +23,26 @@ export default function DriverCard({
   });
 
   const router = useRouter();
-  function touch(session_key: string, driver_number: string, session_name: string) {
+  function touch(
+    session_key: string,
+    driver_number: string,
+    session_name: string
+  ) {
     router.push({
       pathname: "/driver",
-      params: { session: `${session_key}`, driver_number: `${driver_number}`, session_name: `${session_name}` },
+      params: {
+        session: `${session_key}`,
+        driver_number: `${driver_number}`,
+        session_name: `${session_name}`,
+      },
     });
   }
 
   return (
     <Pressable
-      onPress={() => touch(driver?.session_key, driver?.driver_number, session_name)}
+      onPress={() =>
+        touch(driver?.session_key, driver?.driver_number, session_name)
+      }
       style={[styles.driverCardPodium, { backgroundColor: color_key }]}
     >
       <View style={styles.driverImageView}>

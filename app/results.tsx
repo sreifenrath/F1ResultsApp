@@ -50,24 +50,36 @@ export default function Results() {
   };
 
   const sessions = getSessions(positionData);
+  console.log(positionData);
 
   const arrangeResults = (
     positionData: positionData[],
     index: number
   ): string[] => {
     const sessionKey = sessions[sessions.length - index];
-    const positionNo = new Set(positionData.map((item) => item.position));
+
+    // Find the highest position number available
+    const maxPosition = Math.max(
+      ...positionData
+        .filter(
+          (item) => item.session_key.toString().trim() === sessionKey.trim()
+        )
+        .map((item) => item.position)
+    );
+
     const results = [];
 
-    for (let i = 0; i < positionNo.size; i++) {
-      results[i] = positionData
-        .filter(
-          (item) =>
-            item.position === i + 1 &&
-            item.session_key.toString().trim() === sessionKey.trim()
-        )
-        .at(-1)?.driver_number;
+    for (let i = 1; i <= maxPosition; i++) {
+      results[i - 1] =
+        positionData
+          .filter(
+            (item) =>
+              item.position === i &&
+              item.session_key.toString().trim() === sessionKey.trim()
+          )
+          .at(-1)?.driver_number ?? ""; // fallback to empty string if missing
     }
+
     return results.map(String);
   };
 
@@ -99,15 +111,23 @@ export default function Results() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       fetchDriverData();
-    }, 700);
+    }, 1000);
     return () => clearTimeout(timeout);
   }, [positionData]);
 
   const router = useRouter();
-  function touch(session_key: string, driver_number: string, session_name: string) {
+  function touch(
+    session_key: string,
+    driver_number: string,
+    session_name: string
+  ) {
     router.push({
       pathname: "/driver",
-      params: { session: `${session_key}`, driver_number: `${driver_number}`, session_name: `${session_name}` },
+      params: {
+        session: `${session_key}`,
+        driver_number: `${driver_number}`,
+        session_name: `${session_name}`,
+      },
     });
   }
 
@@ -135,7 +155,7 @@ export default function Results() {
             }
           }
           color_key={"#e8be3a"}
-          session_name = {showRaceResults ? "RACE" : "QUALIFYING"}
+          session_name={showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
       );
     } else if (index === 1) {
@@ -152,7 +172,7 @@ export default function Results() {
             }
           }
           color_key={"silver"}
-          session_name = {showRaceResults ? "RACE" : "QUALIFYING"}
+          session_name={showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
       );
     } else if (index === 2) {
@@ -169,17 +189,26 @@ export default function Results() {
             }
           }
           color_key={"#977547"}
-          session_name = {showRaceResults ? "RACE" : "QUALIFYING"}
+          session_name={showRaceResults ? "RACE" : "QUALIFYING"}
         ></DriverCardPodium>
       );
     } else {
       return (
-        <Pressable onPress = {() => {
-          if (curr_driver?.session_key && curr_driver?.driver_number) {
-            touch(curr_driver.session_key, curr_driver.driver_number, showRaceResults ? "RACE" : "QUALIFYING");
-          }
-        }} style={styles.driverCard}>
-          <Text style = {[styles.medText, {fontWeight: "light"}]}>{index + 1}  </Text>
+        <Pressable
+          onPress={() => {
+            if (curr_driver?.session_key && curr_driver?.driver_number) {
+              touch(
+                curr_driver.session_key,
+                curr_driver.driver_number,
+                showRaceResults ? "RACE" : "QUALIFYING"
+              );
+            }
+          }}
+          style={styles.driverCard}
+        >
+          <Text style={[styles.medText, { fontWeight: "light" }]}>
+            {index + 1}{" "}
+          </Text>
           <Text style={styles.medText}>{curr_driver?.full_name}</Text>
         </Pressable>
       );
@@ -197,6 +226,7 @@ export default function Results() {
   const raceResults = arrangeResults(positionData, 1);
   const qualiResults = arrangeResults(positionData, 2);
 
+  console.log(raceResults);
   return (
     <View style={styles.viewContainer}>
       <View style={styles.titleContainer}>
@@ -295,6 +325,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderLeftWidth: 2,
     borderBottomWidth: 3,
+    backgroundColor: "white",
   },
   buttonContainer: {
     flexDirection: "row",
