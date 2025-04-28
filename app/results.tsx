@@ -50,7 +50,6 @@ export default function Results() {
   };
 
   const sessions = getSessions(positionData);
-  console.log(positionData);
 
   const arrangeResults = (
     positionData: positionData[],
@@ -220,7 +219,6 @@ export default function Results() {
   const raceResults = arrangeResults(positionData, 1);
   const qualiResults = arrangeResults(positionData, 2);
 
-  console.log(raceResults);
   return (
     <View style={styles.viewContainer}>
       <View style={styles.titleContainer}>
