@@ -24,8 +24,9 @@ export default function Index() {
 
   const images = [
     require("../assets/images/f1-1.jpg"),
-    require("../assets/images/f1-2.jpg"),
+    require("../assets/images/f1-2.png"),
     require("../assets/images/f1-3.png"),
+    require("../assets/images/f1-4.png"),
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -137,6 +138,9 @@ const styles = StyleSheet.create({
     minWidth: 200,
     maxHeight: 700,
     maxWidth: 1400,
+    borderLeftWidth: 2,
+    borderBottomWidth: 3,
+    resizeMode: "cover",
   },
   imageContainer: {
     flexDirection: "row",
