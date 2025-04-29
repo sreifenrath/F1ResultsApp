@@ -34,7 +34,7 @@ export default function Index() {
   return (
     <>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Formula 1 Results</Text>
+        <Text style={styles.titleText}>Formula 1 Results Web Page</Text>
       </View>
       <View style={styles.container}>
         <View style={styles.aboutContainer}>
@@ -56,7 +56,7 @@ export default function Index() {
           </Text>
           <Pressable onPress={() => touch()} style={styles.button}>
             <Text style={[styles.medText, { fontWeight: "bold" }]}>
-              Go to Results
+              Go to Results →
             </Text>
           </Pressable>
         </View>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "white",
-    width: 250,
+    width: 270,
     height: 75,
     justifyContent: "center",
     alignItems: "center",
