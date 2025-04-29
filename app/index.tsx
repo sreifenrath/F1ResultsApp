@@ -1,104 +1,82 @@
-import { StyleSheet, View, Text, FlatList, Pressable } from "react-native";
-import { useEffect, useState } from "react";
-import { useFonts } from "expo-font";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  Image,
+  FlatList,
+} from "react-native";
 import { useRouter } from "expo-router";
-import DropDownButton from "../components/DropDownButton";
+import { useFonts } from "expo-font";
+import { useState } from "react";
 
 export default function Index() {
-  interface RaceData {
-    meeting_name: string;
-    country_name: string;
-    location: string;
-    meeting_key: string;
-    date_start: string;
+  const router = useRouter();
+  function touch() {
+    router.push({
+      pathname: "/calendar",
+    });
   }
+
   const [fontsLoaded] = useFonts({
     FormulaFont: require("../assets/fonts/Formula1-Regular_web_0.ttf"),
   });
 
+  const images = [
+    require("../assets/images/f1-1.jpg"),
+    require("../assets/images/f1-2.jpg"),
+    require("../assets/images/f1-3.png"),
+  ];
 
-  const router = useRouter();
-  function touch(key: string, race_name: string) {
-    router.push({
-      pathname: "/results",
-      params: { query: `${key}`, race_name: `${race_name}` },
-    });
-  }
-
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-  const renderRace = ({ item, index }: { item: RaceData; index: number }) => {
-    return (
-      <Pressable
-        style={styles.raceContainer}
-        onPress={() => touch(item.meeting_key, item.meeting_name)}
-        onHoverIn={() => setHoveredIndex(index)}
-        onHoverOut={() => setHoveredIndex(null)}
-      >
-        <Text
-          style={[
-            styles.medText,
-            hoveredIndex === index
-              ? { color: "red", fontSize: 21 }
-              : { color: "black" },
-          ]}
-        >
-          {item.meeting_name}
-        </Text>
-        <Text style={styles.smallText}>
-          {item.location}, {item.country_name}
-        </Text>
-      </Pressable>
-    );
-  };
-
-  const [raceData, setRaceData] = useState<RaceData[]>([]);
-  const [year, setYear] = useState<number>(2023);
-
-  const handlePress = (id: number) => {
-    setYear(id);
-  };
-
-  useEffect(() => {
-    fetch(`https://api.openf1.org/v1/meetings`)
-      .then((response) => response.json())
-      .then((raceData) => {
-        const filteredData = raceData
-          .filter((race: { meeting_name: string; }) => !race.meeting_name.toLowerCase().includes("testing"))
-          .map((race: { date_start: string | number | Date; }) => ({
-            ...race,
-            date_start: new Date(race.date_start).getUTCFullYear().toString(),
-          }));
-  
-        setRaceData(filteredData);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, [year]);
-
-  const seasons = Array.from(
-    new Set(raceData.map(race => new Date(race.date_start).getUTCFullYear()))
-  )
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
     <>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>{year} Calendar Results</Text>
+        <Text style={styles.titleText}>Formula 1 Results</Text>
       </View>
       <View style={styles.container}>
-        <View style={styles.yearContainer}>
-          <DropDownButton
-            handlePress={handlePress}
-            seasons={seasons}
-            currentYear={year}
-          />
+        <View style={styles.aboutContainer}>
+          <Text style={styles.largeText}>What Is Formula 1?</Text>
+          <Text style={styles.medText}>
+            Formula One (F1) is the highest class of international racing for
+            open-wheel single-seater formula racing cars sanctioned by the FIA
+            (Fédération Internationale de l'Automobile). The FIA Formula One
+            World Championship has been one of the world's premier forms of
+            motorsport since its inaugural running in 1950 and is often
+            considered to be the pinnacle of motorsport.
+          </Text>
+          <Text style={styles.medText}>
+            The word formula in the name refers to the set of rules all
+            participant cars must follow. A Formula One season consists of a
+            series of races, known as Grands Prix. Grands Prix take place in
+            multiple countries and continents on either purpose-built circuits
+            or closed roads.
+          </Text>
+          <Pressable onPress={() => touch()} style={styles.button}>
+            <Text style={[styles.medText, { fontWeight: "bold" }]}>
+              Go to Results
+            </Text>
+          </Pressable>
         </View>
-        <View style={styles.flatlistContainer}>
-          <FlatList
-            style={{ flex: 1 }}
-            data={raceData.filter(race => race.date_start === year.toString())}
-            renderItem={renderRace}
-            keyExtractor={(item) => item.meeting_key}
-          ></FlatList>
+        <View style={styles.imageContainer}>
+          <Pressable
+            onPress={() =>
+              setCurrentIndex(
+                (prev) => (prev - 1 + images.length) % images.length
+              )
+            }
+          >
+            <Text style={styles.arrow}>←</Text>
+          </Pressable>
+          <Image source={images[currentIndex]} style={styles.image}></Image>
+          <Pressable
+            onPress={() =>
+              setCurrentIndex((prev) => (prev + 1) % images.length)
+            }
+          >
+            <Text style={styles.arrow}>→</Text>
+          </Pressable>
         </View>
       </View>
     </>
@@ -107,21 +85,10 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#e8e8e8",
-    flexDirection: "row",
-    justifyContent: "center",
-    padding: 10,
     flex: 1,
-  },
-  yearContainer: {
+    padding: 20,
+    backgroundColor: "#e8e8e8",
     alignItems: "center",
-    padding: 10,
-  },
-  flatlistContainer: {
-    height: "80%",
-    width: "50%",
-    margin: 25,
-    padding: 10,
   },
   titleContainer: {
     backgroundColor: "red",
@@ -130,6 +97,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  aboutContainer: {
+    width: "60%",
+    alignItems: "center",
+    paddingBottom: 30,
+  },
   titleText: {
     fontSize: 55,
     fontWeight: "bold",
@@ -137,22 +109,49 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     color: "white",
   },
-  medText: {
-    fontSize: 20,
+  largeText: {
+    fontSize: 35,
+    fontFamily: "FormulaFont",
     fontWeight: "bold",
+  },
+  medText: {
+    fontSize: 25,
     fontFamily: "FormulaFont",
     letterSpacing: 1,
+    margin: 10,
+    textAlign: "center",
   },
-  smallText: {
-    fontSize: 11,
-    fontFamily: "FormulaFont",
-    letterSpacing: 1,
-  },
-  raceContainer: {
-    padding: 10,
-    margin: 2,
-    borderBottomWidth: 2,
-    borderLeftWidth: 2,
+  button: {
     backgroundColor: "white",
+    width: 250,
+    height: 75,
+    justifyContent: "center",
+    alignItems: "center",
+    borderLeftWidth: 2,
+    borderBottomWidth: 3,
+  },
+  image: {
+    height: "100%",
+    width: "100%",
+    minHeight: 200,
+    minWidth: 200,
+    maxHeight: 700,
+    maxWidth: 1400,
+  },
+  imageContainer: {
+    flexDirection: "row",
+    width: "50%",
+    height: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  arrow: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "black",
+    fontFamily: "FormulaFont",
+    letterSpacing: 1,
+    padding: 5,
+    opacity: 0.5,
   },
 });
