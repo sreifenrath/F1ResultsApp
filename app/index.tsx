@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   FlatList,
+  ScrollView
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
@@ -32,7 +33,7 @@ export default function Index() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
-    <>
+    <ScrollView style = {styles.screenContainer}>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Formula 1 Results Web Page</Text>
       </View>
@@ -80,15 +81,18 @@ export default function Index() {
           </Pressable>
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    backgroundColor: "#e8e8e8",
+  },
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#e8e8e8",
     alignItems: "center",
   },
   titleContainer: {
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   medText: {
-    fontSize: 25,
+    fontSize: 17,
     fontFamily: "FormulaFont",
     letterSpacing: 1,
     margin: 10,
@@ -124,8 +128,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "white",
-    width: 270,
-    height: 75,
+    width: 220,
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
     borderLeftWidth: 2,
